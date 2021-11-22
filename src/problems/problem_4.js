@@ -10,16 +10,33 @@ export const description =
  - *Note 2: remember that `localStorage` can only store **strings**.*\
  ';
 
-export function Problem () {
-    const [counter, setCounter] = useState(0);
+
+
+export function Problem() {
+
+    const KEY = 'count';
+    let initCount = 0;
+    const storagedCount = localStorage.getItem(KEY);
+    if(storagedCount) {
+        initCount = JSON.parse(storagedCount);
+    }
+
+    const [count, setCount] = useState(initCount);
+
+    function addCount() {
+        const new_c = count + 1;
+        setCount(new_c);
+        localStorage.setItem(KEY, (new_c).toString());
+    }
 
     function reset() {
-        setCounter = 0;
+        setCount(0);
+        localStorage.setItem(KEY, '0');
     }
 
     return <div className="btn-group">
-            <button className="btn btn-primary"  >Clicked {counter} times</button>
-            <button className="btn btn-secondary">Reset</button>
+            <button onClick={addCount} className="btn btn-primary">Clicked {count} time{count > 1 && 's'} </button>
+            <button onClick={reset} className="btn btn-secondary">Reset</button>
         </div>;
     ;
 }
